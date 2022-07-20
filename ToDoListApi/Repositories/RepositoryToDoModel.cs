@@ -1,10 +1,12 @@
-﻿namespace ToDoListApi
+﻿using ToDoListApi.Models;
+
+namespace ToDoListApi.Repositories
 {
     public class RepositoryToDoModel
     {
         private MyContext _context;
-        public RepositoryToDoModel(MyContext context) 
-        { 
+        public RepositoryToDoModel(MyContext context)
+        {
             _context = context;
         }
 
@@ -12,8 +14,8 @@
         /// Возвращает все задачи из ToDoModel
         /// </summary>
         /// <returns></returns>
-        public List<ToDoModel> GetToDoModel() 
-        { 
+        public List<ToDoModel> GetToDoModel()
+        {
             return _context.ToDoModels.ToList();
         }
 

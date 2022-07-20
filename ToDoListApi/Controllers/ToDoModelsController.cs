@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ToDoListApi;
+using ToDoListApi.Models;
+using ToDoListApi.Repositories;
 
 namespace ToDoListApi.Controllers
 {
@@ -22,7 +23,10 @@ namespace ToDoListApi.Controllers
 
         [HttpGet("Get")]
         public ActionResult<List<ToDoModel>> GetToDoModel()
-        { //ок - запрос вернет статус 200
+        { 
+            //достает id пользоввателя из токина
+            var userid = User.Identity.GetId();
+
             return Ok(_repositoryToDoModel.GetToDoModel());
         }
 

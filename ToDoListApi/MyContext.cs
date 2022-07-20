@@ -1,14 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ToDoListApi.Models;
 
 namespace ToDoListApi
 {
     public class MyContext : DbContext
     {
+        public MyContext()
+        {
+        }
+
         public MyContext(DbContextOptions<MyContext> options)
             : base(options)
         {
         }
 
+        public DbSet<Person> People { get; set; }
         public DbSet<ToDoModel> ToDoModels { get; set; }
         public DbSet<GroupModel> GroupModel { get; set; }
 

@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ToDoListApi;
+using ToDoListApi.Models;
+using ToDoListApi.Repositories;
 
 namespace ToDoListApi.Controllers
 {

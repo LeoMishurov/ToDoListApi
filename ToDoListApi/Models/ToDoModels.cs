@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 //using Newtonsoft.Json;
 
-namespace ToDoListApi
+namespace ToDoListApi.Models
 {
     public class ToDoModel
     {
@@ -13,31 +13,15 @@ namespace ToDoListApi
         public int Id { get; set; }
         public int GroupModelId { get; set; }
 
+        public int PersonId { get; set; }
+
         [JsonIgnore]
         //Сылка на GroupModel для enti framevork
         public GroupModel GroupModel { get; set; }
 
     }
 
-    public class GroupModel
-    {
-        public string Name { get; set; }
-
-        public int Id { get; set; }
-
-        //Сылка на ToDoModel для enti framevork
-        public List<ToDoModel> ToDoModels { get; set; }
-
-    }
-
-    public class GroupDTO
-    {
-        public string Name { get; set; }
-
-        public int Id { get; set; }
-
-    }
-    public class ToDoDTO 
+    public class ToDoDTO
     {
         public bool IsDone { get; set; }
 
