@@ -45,10 +45,11 @@ namespace ToDoListApi.Repositories
         /// Удаление обьекта GroupModel из бд
         /// </summary>
         /// <param name="groupModel"></param>
-        public void DeleteGroup(int groupModelId)
+        public void DeleteGroup(int groupModelId, int personId)
         {   //FirstOrDefault() возвращает первый обект совпадающий с условием
-            var groupModel = context.GroupModel.FirstOrDefault(x => x.Id == groupModelId);
+            var groupModel = context.GroupModel.FirstOrDefault(x => x.Id == groupModelId && x.PersonId == personId);
             // подготовка переменной для удаления
+            if(groupModel!=null)
             context.GroupModel.Remove(groupModel);
 
             // сохранение в бд

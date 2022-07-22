@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using ToDoListApi.Repositories;
 
 namespace ToDoListApi.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class GroupModelsController : ControllerBase
@@ -20,15 +22,18 @@ namespace ToDoListApi.Controllers
         {
             _repositoryGroupModel = repository;
         }
-        //непонятно откуда он ее берет, если это за коментить
-        //GroupModel groupModel = new();
+        
 
         [HttpGet("Get")]
         public ActionResult<List<GroupDTO>> GetGroups() 
-        { //ок - запрос вернет статус 200
-           return Ok(_repositoryGroupModel.GetGroups()
-               .Select(x => new GroupDTO { Id = x.Id, Name = x.Name })
-               .ToList()); 
+        { 
+            //достает id пользоввателя из токина
+            var personId = User.Identity.GetId();
+
+            //ок - запрос вернет статус 200
+            return Ok(_repositoryGroupModel.GetGroups().Where(x=>x.PersonId == personId)
+               .Select(x => new GroupDTO { Id = x.Id, Name = x.Name, PersonId = x.PersonId })
+               .ToList());
         }
 
         [HttpPost("Save")]
@@ -42,7 +47,9 @@ namespace ToDoListApi.Controllers
         [HttpPost("Delete")]
         public void DeleteGroup(int groupModelId)
         {
-            _repositoryGroupModel.DeleteGroup(groupModelId);
+            //достает id пользоввателя из токина
+            var personId = User.Identity.GetId();
+            _repositoryGroupModel.DeleteGroup(groupModelId, personId);
         }
        
         
@@ -54,8 +61,16 @@ namespace ToDoListApi.Controllers
         /// <returns></returns>
         private GroupModel ToGroupModel(GroupDTO groupDTO)
         {
+            //достает id пользоввателя из токина
+            var personId = User.Identity.GetId();
+
             //присваивание значений полей через конструктор по умолчанию
-            GroupModel groupModel = new GroupModel { Id = groupDTO.Id, Name = groupDTO.Name };
+            GroupModel groupModel = new GroupModel 
+            { 
+                Id = groupDTO.Id, 
+                Name = groupDTO.Name, 
+                PersonId = personId 
+            };
             return groupModel;
         }
         /// <summary>
@@ -66,7 +81,12 @@ namespace ToDoListApi.Controllers
         private GroupDTO ToGroupDTO(GroupModel groupModel)
         {
             //присваивание значений полей через конструктор по умолчанию
-            GroupDTO groupDTO = new GroupDTO { Id = groupModel.Id, Name = groupModel.Name };
+            GroupDTO groupDTO = new GroupDTO 
+            { 
+                Id = groupModel.Id, 
+                Name = groupModel.Name, 
+                PersonId = groupModel.PersonId 
+            };
             return groupDTO;
         }
     }

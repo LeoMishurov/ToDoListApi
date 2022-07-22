@@ -14,9 +14,9 @@ namespace ToDoListApi.Repositories
         /// Возвращает все задачи из ToDoModel
         /// </summary>
         /// <returns></returns>
-        public List<ToDoModel> GetToDoModel()
+        public List<ToDoModel> GetToDoModel(int PersonId)
         {
-            return _context.ToDoModels.ToList();
+            return _context.ToDoModels.Where(x => x.PersonId == PersonId).ToList();
         }
 
         /// <summary>
@@ -24,18 +24,19 @@ namespace ToDoListApi.Repositories
         /// </summary>
         /// <param name="groupId"></param>
         /// <returns></returns>
-        public List<ToDoModel> GetToDoByGroupId(int groupId)
+        public List<ToDoModel> GetToDoByGroupId(int groupId, int userId)
         {
-            return _context.ToDoModels.Where(x => groupId == 0 || x.GroupModelId == groupId).ToList();
+            return _context.ToDoModels.Where(x => (groupId==0||x.GroupModelId==groupId) && x.PersonId==userId).ToList();
         }
-
+      
         /// <summary>
         /// Удаление обьекта ToDoModel из бд
         /// </summary>
         /// <param name="groupModel"></param>
-        public void DeleteToDoModel(int toDoModelId)
+        public void DeleteToDoModel(int toDoModelId, int userID)
         {
-            var todo = new ToDoModel { Id = toDoModelId };
+
+            var todo = new ToDoModel { Id = toDoModelId, PersonId = userID };
             // Attach(todo) метод указывающий EF на наличие такой переменной
             _context.ToDoModels.Attach(todo);
             // подготовка переменной для удаления

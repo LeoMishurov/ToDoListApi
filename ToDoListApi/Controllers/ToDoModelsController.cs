@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using ToDoListApi.Repositories;
 
 namespace ToDoListApi.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ToDoModelsController : ControllerBase
@@ -27,12 +29,13 @@ namespace ToDoListApi.Controllers
             //достает id пользоввателя из токина
             var userid = User.Identity.GetId();
 
-            return Ok(_repositoryToDoModel.GetToDoModel());
+            return Ok(_repositoryToDoModel.GetToDoModel(userid));
         }
 
         [HttpPost("Save")]
         public ActionResult<ToDoDTO>  SaveToDo(ToDoDTO toDoDTO)
         {
+            
             var toDoModel = ToToDoModel(toDoDTO);
             toDoModel = _repositoryToDoModel.SaveToDo(toDoModel);
 
@@ -42,14 +45,18 @@ namespace ToDoListApi.Controllers
         [HttpPost("Delete")]
         public ActionResult DeleteToDoModel(int toDoModelId)
         {
-            _repositoryToDoModel.DeleteToDoModel(toDoModelId);
+            //достает id пользоввателя из токина
+            var userid = User.Identity.GetId();
+            _repositoryToDoModel.DeleteToDoModel(toDoModelId, userid);
             return Ok();
         }
 
         [HttpGet("GetByGroupId")]
         public List<ToDoModel> GetToDoByGroupId(int Id)
         {
-            return _repositoryToDoModel.GetToDoByGroupId(Id);
+            //достает id пользоввателя из токина
+            var userid = User.Identity.GetId();
+            return _repositoryToDoModel.GetToDoByGroupId(Id, userid);
         }
 
         /// <summary>
@@ -66,7 +73,9 @@ namespace ToDoListApi.Controllers
                 Data = toDoDTO.Data, 
                 GroupModelId = toDoDTO.GroupModelId,
                 IsDone = toDoDTO.IsDone,
-                Id = toDoDTO.Id
+                Id = toDoDTO.Id,
+                PersonId = User.Identity.GetId()
+                
             };
             return toDoModel;
         }
@@ -85,7 +94,9 @@ namespace ToDoListApi.Controllers
                 Data=toDoModel.Data, 
                 GroupModelId=toDoModel.GroupModelId,
                 IsDone = toDoModel.IsDone,
-                Id = toDoModel.Id
+                Id = toDoModel.Id,
+                PersonId = toDoModel.PersonId
+                
             };
             return toDoDTO;
         }

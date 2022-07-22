@@ -30,5 +30,7 @@ namespace ToDoListApi.Models
 
         public int Id { get; set; }
         public int GroupModelId { get; set; }
+
+        public int PersonId { get; set; }
     }
 }
