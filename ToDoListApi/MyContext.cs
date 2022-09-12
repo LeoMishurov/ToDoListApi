@@ -9,8 +9,7 @@ namespace ToDoListApi
         {
         }
 
-        public MyContext(DbContextOptions<MyContext> options)
-            : base(options)
+        public MyContext(DbContextOptions<MyContext> options) : base(options)
         {
         }
 

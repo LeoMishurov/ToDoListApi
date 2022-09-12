@@ -9,7 +9,7 @@
 
             public int PersonId { get; set; }
 
-            //Сылка на ToDoModel для enti framevork
+            // Сылка на ToDoModel для enti framevork
             public List<ToDoModel> ToDoModels { get; set; }
 
         }
@@ -22,6 +22,5 @@
 
             public int PersonId { get; set; }
 
-    }
-    
+    }   
 }

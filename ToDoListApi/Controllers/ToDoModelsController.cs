@@ -21,40 +21,58 @@ namespace ToDoListApi.Controllers
         public ToDoModelsController(RepositoryToDoModel repository)
         {
             _repositoryToDoModel = repository;
-        }       
-
+        }      
+        
+        /// <summary>
+        /// возвращает все задачи
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("Get")]
         public ActionResult<List<ToDoModel>> GetToDoModel()
         { 
-            //достает id пользоввател€ из токина
+            // ƒостает id пользоввател€ из токина
             var userid = User.Identity.GetId();
 
             return Ok(_repositoryToDoModel.GetToDoModel(userid));
         }
 
+        /// <summary>
+        /// сохранение/редактирование задачи в бд
+        /// </summary>
+        /// <param name="toDoDTO"></param>
+        /// <returns></returns>
         [HttpPost("Save")]
         public ActionResult<ToDoDTO>  SaveToDo(ToDoDTO toDoDTO)
-        {
-            
+        {         
             var toDoModel = ToToDoModel(toDoDTO);
             toDoModel = _repositoryToDoModel.SaveToDo(toDoModel);
 
             return ToToDoDTO(toDoModel);
         }
 
+        /// <summary>
+        /// удаление задачи из бд
+        /// </summary>
+        /// <param name="toDoModelId"></param>
+        /// <returns></returns>
         [HttpPost("Delete")]
         public ActionResult DeleteToDoModel(int toDoModelId)
         {
-            //достает id пользоввател€ из токина
+            // ƒостает id пользоввател€ из токина
             var userid = User.Identity.GetId();
             _repositoryToDoModel.DeleteToDoModel(toDoModelId, userid);
             return Ok();
         }
 
+        /// <summary>
+        /// возвращает все задачи с id группы переданной в метод
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
         [HttpGet("GetByGroupId")]
         public List<ToDoModel> GetToDoByGroupId(int Id)
         {
-            //достает id пользоввател€ из токина
+            // ƒостает id пользоввател€ из токина
             var userid = User.Identity.GetId();
             return _repositoryToDoModel.GetToDoByGroupId(Id, userid);
         }
@@ -66,7 +84,7 @@ namespace ToDoListApi.Controllers
         /// <returns></returns>
         private ToDoModel ToToDoModel(ToDoDTO toDoDTO)
         {
-            //присваивание значений полей через конструктор по умолчанию
+            // ѕрисваивание значений полей через конструктор по умолчанию
             ToDoModel toDoModel = new ToDoModel 
             {
                 Text = toDoDTO.Text, 
@@ -74,8 +92,7 @@ namespace ToDoListApi.Controllers
                 GroupModelId = toDoDTO.GroupModelId,
                 IsDone = toDoDTO.IsDone,
                 Id = toDoDTO.Id,
-                PersonId = User.Identity.GetId()
-                
+                PersonId = User.Identity.GetId()               
             };
             return toDoModel;
         }
@@ -87,7 +104,7 @@ namespace ToDoListApi.Controllers
         /// <returns></returns>
         private ToDoDTO ToToDoDTO(ToDoModel toDoModel)
         {
-            //присваивание значений полей через конструктор по умолчанию
+            // ѕрисваивание значений полей через конструктор по умолчанию
             ToDoDTO toDoDTO = new ToDoDTO 
             {
                 Text=toDoModel.Text, 
@@ -95,8 +112,7 @@ namespace ToDoListApi.Controllers
                 GroupModelId=toDoModel.GroupModelId,
                 IsDone = toDoModel.IsDone,
                 Id = toDoModel.Id,
-                PersonId = toDoModel.PersonId
-                
+                PersonId = toDoModel.PersonId              
             };
             return toDoDTO;
         }

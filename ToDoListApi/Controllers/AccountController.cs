@@ -27,7 +27,7 @@ namespace ToDoListApi.Controllers
             }
 
             var now = DateTime.UtcNow;
-            // создаем JWT-токен
+            // Создаем JWT-токен
             var jwt = new JwtSecurityToken(
                     issuer: AuthOptions.ISSUER,
                     audience: AuthOptions.AUDIENCE,
@@ -46,6 +46,12 @@ namespace ToDoListApi.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// авторизация пользователя
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         private ClaimsIdentity GetIdentity(string username, string password)
         {
             Person person = repositoryPerson.GetPerson(username, password);
@@ -56,16 +62,23 @@ namespace ToDoListApi.Controllers
                     new Claim(ClaimsIdentity.DefaultNameClaimType, person.Login),
                     new Claim("id", person.Id.ToString())
                 };
+
                 ClaimsIdentity claimsIdentity =
                 new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
                     ClaimsIdentity.DefaultRoleClaimType);
-                return claimsIdentity;
+                    return claimsIdentity;
             }
 
-            // если пользователя не найдено
+            // Если пользователя не найдено
             return null;
         }
 
+        /// <summary>
+        /// добавлене нового пользователя в бд
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         [HttpPost("Add")]
         public ActionResult PersonAdd(string username, string password) 
         {

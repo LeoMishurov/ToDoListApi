@@ -39,10 +39,10 @@ namespace ToDoListApi.Repositories
             var todo = new ToDoModel { Id = toDoModelId, PersonId = userID };
             // Attach(todo) метод указывающий EF на наличие такой переменной
             _context.ToDoModels.Attach(todo);
-            // подготовка переменной для удаления
+            // Подготовка переменной для удаления
             _context.ToDoModels.Remove(todo);
 
-            // сохранение в бд
+            // Сохранение в бд
             _context.SaveChanges();
         }
 
@@ -53,14 +53,13 @@ namespace ToDoListApi.Repositories
         public ToDoModel SaveToDo(ToDoModel toDoModel)
         {
             if (toDoModel.Id == 0)
-                // подготовка переменной для сохранения
+                // Подготовка переменной для сохранения
                 _context.ToDoModels.Add(toDoModel);
             else
                 _context.ToDoModels.Update(toDoModel);
-            // сохранение в бд
-            _context.SaveChanges();
+                // Сохранение в бд
+                _context.SaveChanges();
             return toDoModel;
         }
-
     }
 }

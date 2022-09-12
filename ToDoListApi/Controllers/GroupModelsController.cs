@@ -23,19 +23,27 @@ namespace ToDoListApi.Controllers
             _repositoryGroupModel = repository;
         }
         
-
+        /// <summary>
+        /// возвращает список всех групп
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("Get")]
         public ActionResult<List<GroupDTO>> GetGroups() 
         { 
-            //достает id пользоввателя из токина
+            // Достает id пользоввателя из токина
             var personId = User.Identity.GetId();
 
-            //ок - запрос вернет статус 200
+            // Ок - запрос вернет статус 200
             return Ok(_repositoryGroupModel.GetGroups().Where(x=>x.PersonId == personId)
                .Select(x => new GroupDTO { Id = x.Id, Name = x.Name, PersonId = x.PersonId })
                .ToList());
         }
 
+        /// <summary>
+        /// добавлене новой группы в бд
+        /// </summary>
+        /// <param name="groupDTO"></param>
+        /// <returns></returns>
         [HttpPost("Save")]
         public GroupDTO SaveGroup(GroupDTO groupDTO)
         {
@@ -44,16 +52,18 @@ namespace ToDoListApi.Controllers
             return ToGroupDTO(groupModels1);            
         }
 
+        /// <summary>
+        /// удаляет группу из бд
+        /// </summary>
+        /// <param name="groupModelId"></param>
         [HttpPost("Delete")]
         public void DeleteGroup(int groupModelId)
         {
-            //достает id пользоввателя из токина
+            // Достает id пользоввателя из токина
             var personId = User.Identity.GetId();
             _repositoryGroupModel.DeleteGroup(groupModelId, personId);
         }
-       
-        
-
+          
         /// <summary>
         /// преобразовавет GroupDTO в GroupModel, убирая лишние поля
         /// </summary>
@@ -61,10 +71,10 @@ namespace ToDoListApi.Controllers
         /// <returns></returns>
         private GroupModel ToGroupModel(GroupDTO groupDTO)
         {
-            //достает id пользоввателя из токина
+            // Достает id пользоввателя из токина
             var personId = User.Identity.GetId();
 
-            //присваивание значений полей через конструктор по умолчанию
+            // Присваивание значений полей через конструктор по умолчанию
             GroupModel groupModel = new GroupModel 
             { 
                 Id = groupDTO.Id, 
@@ -73,6 +83,7 @@ namespace ToDoListApi.Controllers
             };
             return groupModel;
         }
+
         /// <summary>
         /// преобразовавет GroupModel в GroupDTO, убирая лишние поля
         /// </summary>
@@ -80,7 +91,7 @@ namespace ToDoListApi.Controllers
         /// <returns></returns>
         private GroupDTO ToGroupDTO(GroupModel groupModel)
         {
-            //присваивание значений полей через конструктор по умолчанию
+            // Присваивание значений полей через конструктор по умолчанию
             GroupDTO groupDTO = new GroupDTO 
             { 
                 Id = groupModel.Id, 

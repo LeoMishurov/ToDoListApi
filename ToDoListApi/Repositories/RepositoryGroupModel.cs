@@ -15,6 +15,7 @@ namespace ToDoListApi.Repositories
         {
             this.context = context;
         }
+
         /// <summary>
         /// Возвращает все группы из GroupModels
         /// </summary>
@@ -24,7 +25,6 @@ namespace ToDoListApi.Repositories
             return context.GroupModel.ToList();
         }
 
-
         /// <summary>
         /// Сохранение группы в бд
         /// </summary>
@@ -32,29 +32,29 @@ namespace ToDoListApi.Repositories
         public GroupModel SaveGroup(GroupModel groupModel)
         {
             if (groupModel.Id == 0)
-                // подготовка переменной для сохранения
+                // Подготовка переменной для сохранения
                 context.GroupModel.Add(groupModel);
             else
                 context.GroupModel.Update(groupModel);
-            // сохранение в бд
-            context.SaveChanges();
+                // Сохранение в бд
+                context.SaveChanges();
 
             return groupModel;
         }
+
         /// <summary>
         /// Удаление обьекта GroupModel из бд
         /// </summary>
         /// <param name="groupModel"></param>
         public void DeleteGroup(int groupModelId, int personId)
-        {   //FirstOrDefault() возвращает первый обект совпадающий с условием
+        {   // FirstOrDefault() возвращает первый обект совпадающий с условием
             var groupModel = context.GroupModel.FirstOrDefault(x => x.Id == groupModelId && x.PersonId == personId);
-            // подготовка переменной для удаления
+            // Подготовка переменной для удаления
             if(groupModel!=null)
             context.GroupModel.Remove(groupModel);
 
-            // сохранение в бд
+            // Сохранение в бд
             context.SaveChanges();
         }
-
     }
 }
